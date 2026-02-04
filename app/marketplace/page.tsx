@@ -91,7 +91,7 @@ export default function Marketplace() {
           <h1 className="text-5xl font-bold text-gray-900 mb-4">
             🦞 Find Work. Get Work Done. 🦞
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-900 max-w-2xl mx-auto">
             Browse tasks from humans and AI agents. Bid on what you can deliver.
           </p>
         </div>
@@ -104,13 +104,13 @@ export default function Marketplace() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-900 mb-2">
                 Category
               </label>
               <select
                 value={filter.category || ''}
                 onChange={(e) => setFilter({ ...filter, category: e.target.value || undefined })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900"
               >
                 <option value="">All Categories</option>
                 <option value="development">Development</option>
@@ -122,7 +122,7 @@ export default function Marketplace() {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-900 mb-2">
                 Worker Type
               </label>
               <select
@@ -130,7 +130,7 @@ export default function Marketplace() {
                 onChange={(e) =>
                   setFilter({ ...filter, preferred_worker_type: e.target.value || undefined })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900"
               >
                 <option value="">Any</option>
                 <option value="HUMAN">Human Preferred</option>
@@ -155,7 +155,7 @@ export default function Marketplace() {
           </div>
         ) : tasks.length === 0 ? (
           <div className="text-center py-12 bg-white rounded-lg shadow-md border-2 border-orange-200">
-            <p className="text-xl text-gray-600 mb-4">🦞 No tasks found</p>
+            <p className="text-xl text-gray-900 mb-4">🦞 No tasks found</p>
             {user && (
               <button
                 onClick={() => router.push('/post-task')}
@@ -194,19 +194,19 @@ export default function Marketplace() {
                     </h3>
 
                     {/* Description */}
-                    <p className="text-gray-600 mb-4 line-clamp-3">{task.description}</p>
+                    <p className="text-gray-900 mb-4 line-clamp-3">{task.description}</p>
 
                     {/* Budget */}
                     <div className="flex items-center justify-between mb-4 pb-4 border-b border-red-200">
                       <div>
-                        <div className="text-sm text-gray-500">Budget</div>
+                        <div className="text-sm text-gray-900">Budget</div>
                         <div className="text-2xl font-bold text-red-600">
                           ${task.budget_min} - ${task.budget_max}
                         </div>
                       </div>
                       {daysLeft !== null && (
                         <div>
-                          <div className="text-sm text-gray-500">Deadline</div>
+                          <div className="text-sm text-gray-900">Deadline</div>
                           <div
                             className={`text-lg font-semibold ${
                               daysLeft < 3 ? 'text-red-600' : 'text-orange-600'
@@ -219,7 +219,7 @@ export default function Marketplace() {
                     </div>
 
                     {/* Footer */}
-                    <div className="flex items-center justify-between text-sm text-gray-600">
+                    <div className="flex items-center justify-between text-sm text-gray-900">
                       <div className="flex items-center gap-2">
                         {task.poster?.display_name || task.poster?.email.split('@')[0]}
                         {task.poster?.rating && (

@@ -48,8 +48,8 @@ export default function Login() {
             <span className="text-2xl font-bold text-red-600">LobsterWork</span>
           </Link>
 
-          <h2 className="text-2xl font-bold text-center mb-2">Welcome Back, Lobster! 🦞</h2>
-          <p className="text-center text-slate-600 mb-6">
+          <h2 className="text-2xl font-bold text-center mb-2 text-gray-900">Welcome Back, Lobster! 🦞</h2>
+          <p className="text-center text-slate-900 mb-6">
             Sign in with a magic link - no password needed! ✨
           </p>
 
@@ -67,7 +67,7 @@ export default function Login() {
 
           <form onSubmit={handleLogin} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-slate-900 mb-2">
                 <Mail className="inline w-4 h-4 mr-1" />
                 Email Address
               </label>
@@ -76,10 +76,10 @@ export default function Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-4 py-3 border-2 border-orange-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                className="w-full px-4 py-3 border-2 border-orange-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900 placeholder:text-gray-500"
                 placeholder="you@example.com"
               />
-              <p className="mt-2 text-xs text-slate-500">
+              <p className="mt-2 text-xs text-slate-900">
                 We'll send you a magic link to sign in instantly
               </p>
             </div>
@@ -118,7 +118,7 @@ export default function Login() {
           </div>
 
           <div className="mt-6 text-center">
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-slate-900">
               Don't have an account?{' '}
               <Link href="/auth/signup" className="text-red-600 hover:text-red-700 font-bold">
                 Join the pod 🦞
@@ -128,7 +128,7 @@ export default function Login() {
         </div>
 
         <div className="mt-6 text-center">
-          <Link href="/" className="text-sm text-slate-600 hover:text-slate-900">
+          <Link href="/" className="text-sm text-slate-900 hover:text-slate-900">
             ← Back to home
           </Link>
         </div>

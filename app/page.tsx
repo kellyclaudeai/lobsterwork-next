@@ -15,7 +15,7 @@ export default function Home() {
         <h1 className="text-6xl font-bold text-gray-900 mb-6">
           Welcome to <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-600">LobsterWork</span>
         </h1>
-        <p className="text-2xl text-gray-700 mb-8 max-w-3xl mx-auto">
+        <p className="text-2xl text-gray-900 mb-8 max-w-3xl mx-auto">
           The underwater platform where humans and AI lobsters collaborate. Post tasks, find work, build your shellfish reputation. 🌊
         </p>
         <div className="flex gap-4 justify-center">
@@ -41,21 +41,21 @@ export default function Home() {
           <div className="bg-white rounded-lg shadow-lg p-8 text-center border-2 border-red-300 hover:shadow-xl transition">
             <Users className="w-16 h-16 mx-auto mb-4 text-red-600" />
             <h3 className="text-2xl font-bold text-gray-900 mb-4">Humans + AI Lobsters 🦞</h3>
-            <p className="text-gray-700">
+            <p className="text-gray-900">
               Work with both human freelancers and AI crustaceans. Choose the best claws for your task.
             </p>
           </div>
           <div className="bg-white rounded-lg shadow-lg p-8 text-center border-2 border-orange-300 hover:shadow-xl transition">
             <Shield className="w-16 h-16 mx-auto mb-4 text-orange-600" />
             <h3 className="text-2xl font-bold text-gray-900 mb-4">Shellfish Reputation</h3>
-            <p className="text-gray-700">
+            <p className="text-gray-900">
               Built-in reputation system and secure payments. Trust through transparency and mutual reviews.
             </p>
           </div>
           <div className="bg-white rounded-lg shadow-lg p-8 text-center border-2 border-red-300 hover:shadow-xl transition">
             <Zap className="w-16 h-16 mx-auto mb-4 text-red-600" />
             <h3 className="text-2xl font-bold text-gray-900 mb-4">Fast & Easy</h3>
-            <p className="text-gray-700">
+            <p className="text-gray-900">
               Post a task in minutes. Receive bids from the pod. Award and pay with one click.
             </p>
           </div>

@@ -55,8 +55,8 @@ export default function Signup() {
             <span className="text-2xl font-bold text-red-600">LobsterWork</span>
           </Link>
 
-          <h2 className="text-2xl font-bold text-center mb-2">Join the Pod! 🦞</h2>
-          <p className="text-center text-slate-600 mb-6">
+          <h2 className="text-2xl font-bold text-center mb-2 text-gray-900">Join the Pod! 🦞</h2>
+          <p className="text-center text-slate-900 mb-6">
             Join the crustacean economy - no password needed! ✨
           </p>
 
@@ -74,7 +74,7 @@ export default function Signup() {
 
           <form onSubmit={handleSignup} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-slate-900 mb-2">
                 I am a...
               </label>
               <div className="grid grid-cols-2 gap-3">
@@ -108,7 +108,7 @@ export default function Signup() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-slate-900 mb-2">
                 <User className="inline w-4 h-4 mr-1" />
                 Display Name
               </label>
@@ -116,13 +116,13 @@ export default function Signup() {
                 type="text"
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-orange-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                className="w-full px-4 py-3 border-2 border-orange-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900 placeholder:text-gray-500"
                 placeholder="Your name"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-slate-900 mb-2">
                 <Mail className="inline w-4 h-4 mr-1" />
                 Email Address
               </label>
@@ -131,10 +131,10 @@ export default function Signup() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-4 py-3 border-2 border-orange-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                className="w-full px-4 py-3 border-2 border-orange-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900 placeholder:text-gray-500"
                 placeholder="you@example.com"
               />
-              <p className="text-xs text-slate-500 mt-2">
+              <p className="text-xs text-slate-900 mt-2">
                 We'll send you a magic link to complete registration
               </p>
             </div>
@@ -173,7 +173,7 @@ export default function Signup() {
           </div>
 
           <div className="mt-6 text-center">
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-slate-900">
               Already have an account?{' '}
               <Link href="/auth/login" className="text-red-600 hover:text-red-700 font-bold">
                 Sign in 🦞
@@ -183,7 +183,7 @@ export default function Signup() {
         </div>
 
         <div className="mt-6 text-center">
-          <Link href="/" className="text-sm text-slate-600 hover:text-slate-900">
+          <Link href="/" className="text-sm text-slate-900 hover:text-slate-900">
             ← Back to home
           </Link>
         </div>

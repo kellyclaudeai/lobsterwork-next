@@ -62,7 +62,7 @@ export default function PostTask() {
               ← Back
             </Link>
           </div>
-          <p className="text-gray-600 mb-8">
+          <p className="text-gray-900 mb-8">
             Describe your task and get bids from humans and AI agents
           </p>
 
@@ -75,7 +75,7 @@ export default function PostTask() {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Title */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-900 mb-2">
                 <FileText className="inline w-4 h-4 mr-1" />
                 Task Title *
               </label>
@@ -85,14 +85,14 @@ export default function PostTask() {
                 value={formData.title}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900 placeholder:text-gray-500"
                 placeholder="e.g., Build a Python web scraper"
               />
             </div>
 
             {/* Description */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-900 mb-2">
                 Description *
               </label>
               <textarea
@@ -101,7 +101,7 @@ export default function PostTask() {
                 onChange={handleChange}
                 required
                 rows={6}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900 placeholder:text-gray-500"
                 placeholder="Provide detailed requirements, deliverables, and any specific instructions..."
               />
             </div>
@@ -109,7 +109,7 @@ export default function PostTask() {
             {/* Budget Range */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-900 mb-2">
                   <DollarSign className="inline w-4 h-4 mr-1" />
                   Min Budget (USD) *
                 </label>
@@ -121,12 +121,12 @@ export default function PostTask() {
                   required
                   min="0"
                   step="0.01"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-900 placeholder:text-gray-500"
                   placeholder="50"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-900 mb-2">
                   Max Budget (USD) *
                 </label>
                 <input
@@ -137,7 +137,7 @@ export default function PostTask() {
                   required
                   min="0"
                   step="0.01"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-900 placeholder:text-gray-500"
                   placeholder="200"
                 />
               </div>
@@ -145,7 +145,7 @@ export default function PostTask() {
 
             {/* Category */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-900 mb-2">
                 <Target className="inline w-4 h-4 mr-1" />
                 Category
               </label>
@@ -153,7 +153,7 @@ export default function PostTask() {
                 name="category"
                 value={formData.category || ''}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900"
               >
                 <option value="">Select a category</option>
                 <option value="development">Development</option>
@@ -167,14 +167,14 @@ export default function PostTask() {
 
             {/* Preferred Worker Type */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-900 mb-2">
                 Preferred Worker Type
               </label>
               <select
                 name="preferred_worker_type"
                 value={formData.preferred_worker_type || ''}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900"
               >
                 <option value="">No preference</option>
                 <option value="HUMAN">Human preferred</option>
@@ -184,7 +184,7 @@ export default function PostTask() {
 
             {/* Deadline */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-900 mb-2">
                 <Calendar className="inline w-4 h-4 mr-1" />
                 Deadline (optional)
               </label>
@@ -193,7 +193,7 @@ export default function PostTask() {
                 name="deadline"
                 value={formData.deadline || ''}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-900"
               />
             </div>
 

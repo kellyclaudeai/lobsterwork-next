@@ -160,7 +160,7 @@ export default function TaskDetail() {
               </span>
             </div>
             <div className="text-right">
-              <div className="text-sm text-gray-500">Budget Range</div>
+              <div className="text-sm text-gray-900">Budget Range</div>
               <div className="text-2xl font-bold text-red-600">
                 ${task.budget_min} - ${task.budget_max}
               </div>
@@ -169,7 +169,7 @@ export default function TaskDetail() {
 
           <h1 className="text-3xl font-bold text-gray-900 mb-4">{task.title}</h1>
 
-          <div className="flex flex-wrap gap-4 text-sm text-gray-600 mb-6">
+          <div className="flex flex-wrap gap-4 text-sm text-gray-900 mb-6">
             {task.category && (
               <div className="flex items-center">
                 <span className="px-3 py-1 bg-orange-100 text-orange-700 rounded-full">
@@ -197,7 +197,7 @@ export default function TaskDetail() {
 
           <div className="prose max-w-none mb-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-2">Description</h3>
-            <p className="text-gray-700 whitespace-pre-wrap">{task.description}</p>
+            <p className="text-gray-900 whitespace-pre-wrap">{task.description}</p>
           </div>
 
           {task.poster && (
@@ -212,7 +212,7 @@ export default function TaskDetail() {
                     {task.poster.display_name || task.poster.email}
                   </div>
                   {task.poster.rating && (
-                    <div className="flex items-center text-sm text-gray-600">
+                    <div className="flex items-center text-sm text-gray-900">
                       <Star className="w-4 h-4 text-yellow-400 fill-current mr-1" />
                       {task.poster.rating.toFixed(1)} ({task.poster.review_count} reviews)
                     </div>
@@ -241,7 +241,7 @@ export default function TaskDetail() {
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Submit Your Bid</h2>
             <form onSubmit={handleSubmitBid} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-900 mb-2">
                   <DollarSign className="inline w-4 h-4 mr-1" />
                   Your Bid Amount (USD) *
                 </label>
@@ -254,13 +254,13 @@ export default function TaskDetail() {
                   required
                   min="0"
                   step="0.01"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 text-gray-900 placeholder:text-gray-500"
                   placeholder="Enter your bid amount"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-900 mb-2">
                   Proposal *
                 </label>
                 <textarea
@@ -268,14 +268,14 @@ export default function TaskDetail() {
                   onChange={(e) => setBidData({ ...bidData, proposal: e.target.value })}
                   required
                   rows={4}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 text-gray-900 placeholder:text-gray-500"
                   placeholder="Explain your approach, relevant experience, and why you're the best fit..."
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-900 mb-2">
                     <Clock className="inline w-4 h-4 mr-1" />
                     Estimated Hours
                   </label>
@@ -290,12 +290,12 @@ export default function TaskDetail() {
                     }
                     min="0"
                     step="0.5"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 text-gray-900 placeholder:text-gray-500"
                     placeholder="e.g., 10"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-900 mb-2">
                     <Calendar className="inline w-4 h-4 mr-1" />
                     Completion Date
                   </label>
@@ -305,7 +305,7 @@ export default function TaskDetail() {
                     onChange={(e) =>
                       setBidData({ ...bidData, estimated_completion: e.target.value })
                     }
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 text-gray-900"
                   />
                 </div>
               </div>
@@ -337,7 +337,7 @@ export default function TaskDetail() {
           </h2>
 
           {bids.length === 0 ? (
-            <p className="text-gray-500 text-center py-8">No bids yet</p>
+            <p className="text-gray-900 text-center py-8">No bids yet</p>
           ) : (
             <div className="space-y-4">
               {bids.map((bid) => (
@@ -362,7 +362,7 @@ export default function TaskDetail() {
                           {bid.bidder?.display_name || bid.bidder?.email}
                         </div>
                         {bid.bidder?.rating && (
-                          <div className="flex items-center text-sm text-gray-600">
+                          <div className="flex items-center text-sm text-gray-900">
                             <Star className="w-3 h-3 text-yellow-400 fill-current mr-1" />
                             {bid.bidder.rating.toFixed(1)} ({bid.bidder.review_count}{' '}
                             reviews)
@@ -389,9 +389,9 @@ export default function TaskDetail() {
                     </div>
                   </div>
 
-                  <p className="text-gray-700 mb-3 whitespace-pre-wrap">{bid.proposal}</p>
+                  <p className="text-gray-900 mb-3 whitespace-pre-wrap">{bid.proposal}</p>
 
-                  <div className="flex flex-wrap gap-4 text-sm text-gray-600">
+                  <div className="flex flex-wrap gap-4 text-sm text-gray-900">
                     {bid.estimated_hours && (
                       <div className="flex items-center">
                         <Clock className="w-4 h-4 mr-1" />
