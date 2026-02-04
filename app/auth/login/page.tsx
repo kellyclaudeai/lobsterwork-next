@@ -2,12 +2,10 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { Mail } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 
 export default function Login() {
-  const router = useRouter();
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -40,46 +38,48 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-50 via-red-50 to-orange-100 flex items-center justify-center py-12 px-4">
-      <div className="max-w-md w-full">
-        <div className="bg-white rounded-2xl border-2 border-red-300 p-8 shadow-xl">
+    <div className="min-h-screen gradient-hero flex items-center justify-center py-12 px-4">
+      <main className="max-w-md w-full">
+        <div className="card">
           <Link href="/" className="flex items-center gap-2 justify-center mb-6">
             <span className="text-5xl">🦞</span>
             <span className="text-2xl font-bold text-red-600">LobsterWork</span>
           </Link>
 
-          <h2 className="text-2xl font-bold text-center mb-2 text-gray-900">Welcome Back, Lobster! 🦞</h2>
-          <p className="text-center text-slate-900 mb-6">
+          <h1 className="text-2xl font-bold text-center mb-2 text-gray-900">Welcome Back, Lobster! 🦞</h1>
+          <p className="text-center text-gray-700 mb-6">
             Sign in with a magic link - no password needed! ✨
           </p>
 
           {message && (
-            <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg text-green-700">
+            <div className="alert alert-success mb-6">
               {message}
             </div>
           )}
 
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
+            <div className="alert alert-error mb-6">
               {error}
             </div>
           )}
 
           <form onSubmit={handleLogin} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-slate-900 mb-2">
-                <Mail className="inline w-4 h-4 mr-1" />
+              <label htmlFor="email" className="block text-sm font-medium text-gray-900 mb-2">
+                <Mail className="inline w-4 h-4 mr-1" aria-hidden="true" />
                 Email Address
               </label>
               <input
+                id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-4 py-3 border-2 border-orange-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900 placeholder:text-gray-500"
+                className="input"
                 placeholder="you@example.com"
+                autoComplete="email"
               />
-              <p className="mt-2 text-xs text-slate-900">
+              <p className="mt-2 text-xs text-gray-600">
                 We'll send you a magic link to sign in instantly
               </p>
             </div>
@@ -87,11 +87,11 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full px-4 py-3 bg-gradient-to-r from-red-500 to-orange-600 text-white rounded-lg hover:from-red-600 hover:to-orange-700 transition disabled:opacity-50 disabled:cursor-not-allowed font-bold shadow-lg flex items-center justify-center gap-2"
+              className="btn btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <>
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                   Sending magic link...
                 </>
               ) : (
@@ -103,8 +103,8 @@ export default function Login() {
             </button>
           </form>
 
-          <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-sm text-blue-700">
+          <div className="alert alert-info mt-6">
+            <p className="text-sm">
               <span className="font-bold">🔐 How it works:</span>
               <br />
               1. Enter your email
@@ -118,7 +118,7 @@ export default function Login() {
           </div>
 
           <div className="mt-6 text-center">
-            <p className="text-sm text-slate-900">
+            <p className="text-sm text-gray-700">
               Don't have an account?{' '}
               <Link href="/auth/signup" className="text-red-600 hover:text-red-700 font-bold">
                 Join the pod 🦞
@@ -128,11 +128,11 @@ export default function Login() {
         </div>
 
         <div className="mt-6 text-center">
-          <Link href="/" className="text-sm text-slate-900 hover:text-slate-900">
+          <Link href="/" className="text-sm text-gray-600 hover:text-gray-900">
             ← Back to home
           </Link>
         </div>
-      </div>
+      </main>
     </div>
   );
 }

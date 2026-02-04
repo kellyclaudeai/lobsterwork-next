@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import {
   DollarSign,
@@ -15,13 +15,13 @@ import {
 } from 'lucide-react';
 import { getTask, createBid, acceptBid, getBidsForTask } from '@/services/api';
 import { createClient } from '@/lib/supabase/client';
+import Navigation from '@/components/Navigation';
 import type { Task, Bid, CreateBidInput } from '@/types';
 
 export const dynamic = 'force-dynamic';
 
 export default function TaskDetail() {
   const params = useParams();
-  const router = useRouter();
   const [task, setTask] = useState<Task | null>(null);
   const [bids, setBids] = useState<Bid[]>([]);
   const [loading, setLoading] = useState(true);
@@ -103,328 +103,336 @@ export default function TaskDetail() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></div>
+      <div className="min-h-screen gradient-hero">
+        <Navigation />
+        <div className="flex items-center justify-center py-24" role="status" aria-label="Loading task">
+          <div className="spinner" />
+        </div>
       </div>
     );
   }
 
   if (!task) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Task not found</h2>
-          <Link href="/marketplace" className="text-red-600 hover:text-red-700">
-            Back to marketplace
-          </Link>
+      <div className="min-h-screen gradient-hero">
+        <Navigation />
+        <div className="flex items-center justify-center py-24">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">Task not found</h1>
+            <Link href="/marketplace" className="text-red-600 hover:text-red-700 font-medium">
+              Back to marketplace
+            </Link>
+          </div>
         </div>
       </div>
     );
   }
 
+  const getStatusBadge = (status: string) => {
+    const configs: Record<string, { class: string; icon: React.ReactNode; emoji: string }> = {
+      OPEN: { class: 'badge-success', icon: null, emoji: '🦞' },
+      IN_PROGRESS: { class: 'badge-warning', icon: null, emoji: '🦞' },
+      COMPLETED: { class: 'badge-lobster', icon: <CheckCircle className="w-4 h-4" />, emoji: '✅' },
+      CANCELLED: { class: 'badge-error', icon: <XCircle className="w-4 h-4" />, emoji: '❌' },
+    };
+    const config = configs[status] || configs.OPEN;
+    return (
+      <span className={`badge ${config.class}`}>
+        {config.emoji} {status}
+      </span>
+    );
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 via-orange-50 to-red-50 py-12 px-4">
-      <div className="max-w-5xl mx-auto">
-        {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
-            {error}
-          </div>
-        )}
+    <div className="min-h-screen gradient-hero">
+      <Navigation />
 
-        {/* Task Card */}
-        <div className="bg-white rounded-lg shadow-xl p-8 mb-6">
-          <div className="flex items-center justify-between mb-6">
-            <Link href="/marketplace" className="text-red-600 hover:text-red-700">
-              ← Back to marketplace
-            </Link>
-          </div>
-
-          <div className="flex items-start justify-between mb-4">
-            <div>
-              <span
-                className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${
-                  task.status === 'OPEN'
-                    ? 'bg-green-100 text-green-800'
-                    : task.status === 'IN_PROGRESS'
-                    ? 'bg-orange-100 text-orange-800'
-                    : task.status === 'COMPLETED'
-                    ? 'bg-gray-100 text-gray-800'
-                    : 'bg-red-100 text-red-800'
-                }`}
-              >
-                {task.status === 'OPEN' && '🦞 '}
-                {task.status === 'IN_PROGRESS' && '🦞 '}
-                {task.status === 'COMPLETED' && '✅ '}
-                {task.status === 'CANCELLED' && '❌ '}
-                {task.status}
-              </span>
-            </div>
-            <div className="text-right">
-              <div className="text-sm text-gray-900">Budget Range</div>
-              <div className="text-2xl font-bold text-red-600">
-                ${task.budget_min} - ${task.budget_max}
-              </div>
-            </div>
-          </div>
-
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">{task.title}</h1>
-
-          <div className="flex flex-wrap gap-4 text-sm text-gray-900 mb-6">
-            {task.category && (
-              <div className="flex items-center">
-                <span className="px-3 py-1 bg-orange-100 text-orange-700 rounded-full">
-                  {task.category}
-                </span>
-              </div>
-            )}
-            {task.preferred_worker_type && (
-              <div className="flex items-center">
-                <User className="w-4 h-4 mr-1" />
-                <span>Prefers: {task.preferred_worker_type}</span>
-              </div>
-            )}
-            {task.deadline && (
-              <div className="flex items-center">
-                <Calendar className="w-4 h-4 mr-1" />
-                <span>Deadline: {new Date(task.deadline).toLocaleDateString()}</span>
-              </div>
-            )}
-            <div className="flex items-center">
-              <Clock className="w-4 h-4 mr-1" />
-              <span>Posted: {new Date(task.created_at).toLocaleDateString()}</span>
-            </div>
-          </div>
-
-          <div className="prose max-w-none mb-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Description</h3>
-            <p className="text-gray-900 whitespace-pre-wrap">{task.description}</p>
-          </div>
-
-          {task.poster && (
-            <div className="border-t pt-4">
-              <h3 className="text-sm font-semibold text-gray-900 mb-2">Posted by</h3>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-orange-500 rounded-full flex items-center justify-center text-white font-bold">
-                  {task.poster.display_name?.[0] || task.poster.email[0].toUpperCase()}
-                </div>
-                <div>
-                  <div className="font-medium text-gray-900">
-                    {task.poster.display_name || task.poster.email}
-                  </div>
-                  {task.poster.rating && (
-                    <div className="flex items-center text-sm text-gray-900">
-                      <Star className="w-4 h-4 text-yellow-400 fill-current mr-1" />
-                      {task.poster.rating.toFixed(1)} ({task.poster.review_count} reviews)
-                    </div>
-                  )}
-                </div>
-              </div>
+      <main id="main-content" className="container mx-auto px-4 py-12">
+        <div className="max-w-5xl mx-auto">
+          {error && (
+            <div className="alert alert-error mb-6">
+              {error}
             </div>
           )}
-        </div>
 
-        {/* Bid Form */}
-        {canBid && !showBidForm && (
-          <div className="mb-6">
-            <button
-              onClick={() => setShowBidForm(true)}
-              className="w-full px-6 py-3 bg-gradient-to-r from-red-600 to-orange-600 text-white rounded-lg font-semibold hover:from-red-700 hover:to-orange-700 transition flex items-center justify-center gap-2"
-            >
-              <Send className="w-5 h-5" />
-              🦞 Submit a Bid
-            </button>
-          </div>
-        )}
+          {/* Task Card */}
+          <article className="card mb-6">
+            <div className="flex items-center justify-between mb-6">
+              <Link href="/marketplace" className="text-red-600 hover:text-red-700 font-medium">
+                ← Back to marketplace
+              </Link>
+            </div>
 
-        {showBidForm && canBid && (
-          <div className="bg-white rounded-lg shadow-xl p-8 mb-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Submit Your Bid</h2>
-            <form onSubmit={handleSubmitBid} className="space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
               <div>
-                <label className="block text-sm font-medium text-gray-900 mb-2">
-                  <DollarSign className="inline w-4 h-4 mr-1" />
-                  Your Bid Amount (USD) *
-                </label>
-                <input
-                  type="number"
-                  value={bidData.amount || ''}
-                  onChange={(e) =>
-                    setBidData({ ...bidData, amount: parseFloat(e.target.value) || 0 })
-                  }
-                  required
-                  min="0"
-                  step="0.01"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 text-gray-900 placeholder:text-gray-500"
-                  placeholder="Enter your bid amount"
-                />
+                {getStatusBadge(task.status)}
               </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-900 mb-2">
-                  Proposal *
-                </label>
-                <textarea
-                  value={bidData.proposal}
-                  onChange={(e) => setBidData({ ...bidData, proposal: e.target.value })}
-                  required
-                  rows={4}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 text-gray-900 placeholder:text-gray-500"
-                  placeholder="Explain your approach, relevant experience, and why you're the best fit..."
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-900 mb-2">
-                    <Clock className="inline w-4 h-4 mr-1" />
-                    Estimated Hours
-                  </label>
-                  <input
-                    type="number"
-                    value={bidData.estimated_hours || ''}
-                    onChange={(e) =>
-                      setBidData({
-                        ...bidData,
-                        estimated_hours: parseFloat(e.target.value) || undefined,
-                      })
-                    }
-                    min="0"
-                    step="0.5"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 text-gray-900 placeholder:text-gray-500"
-                    placeholder="e.g., 10"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-900 mb-2">
-                    <Calendar className="inline w-4 h-4 mr-1" />
-                    Completion Date
-                  </label>
-                  <input
-                    type="date"
-                    value={bidData.estimated_completion || ''}
-                    onChange={(e) =>
-                      setBidData({ ...bidData, estimated_completion: e.target.value })
-                    }
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 text-gray-900"
-                  />
+              <div className="text-right">
+                <div className="text-sm text-gray-600">Budget Range</div>
+                <div className="text-2xl font-bold text-red-600">
+                  ${task.budget_min} - ${task.budget_max}
                 </div>
               </div>
+            </div>
 
-              <div className="flex gap-4">
-                <button
-                  type="button"
-                  onClick={() => setShowBidForm(false)}
-                  className="flex-1 px-6 py-3 border border-gray-300 rounded-lg font-semibold text-gray-700 hover:bg-gray-50 transition"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="flex-1 px-6 py-3 bg-gradient-to-r from-red-600 to-orange-600 text-white rounded-lg font-semibold hover:from-red-700 hover:to-orange-700 transition disabled:opacity-50"
-                >
-                  {submitting ? 'Submitting...' : 'Submit Bid'}
-                </button>
-              </div>
-            </form>
-          </div>
-        )}
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">{task.title}</h1>
 
-        {/* Bids List */}
-        <div className="bg-white rounded-lg shadow-xl p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            Bids ({bids.length})
-          </h2>
+            <div className="flex flex-wrap gap-3 text-sm text-gray-700 mb-6">
+              {task.category && (
+                <span className="badge badge-coral">
+                  {task.category}
+                </span>
+              )}
+              {task.preferred_worker_type && (
+                <span className="flex items-center gap-1">
+                  <User className="w-4 h-4" aria-hidden="true" />
+                  Prefers: {task.preferred_worker_type}
+                </span>
+              )}
+              {task.deadline && (
+                <span className="flex items-center gap-1">
+                  <Calendar className="w-4 h-4" aria-hidden="true" />
+                  Deadline: {new Date(task.deadline).toLocaleDateString()}
+                </span>
+              )}
+              <span className="flex items-center gap-1">
+                <Clock className="w-4 h-4" aria-hidden="true" />
+                Posted: {new Date(task.created_at).toLocaleDateString()}
+              </span>
+            </div>
 
-          {bids.length === 0 ? (
-            <p className="text-gray-900 text-center py-8">No bids yet</p>
-          ) : (
-            <div className="space-y-4">
-              {bids.map((bid) => (
-                <div
-                  key={bid.id}
-                  className={`border rounded-lg p-4 ${
-                    bid.status === 'ACCEPTED'
-                      ? 'border-green-500 bg-green-50'
-                      : bid.status === 'REJECTED'
-                      ? 'border-red-300 bg-red-50'
-                      : 'border-orange-300 bg-orange-50'
-                  }`}
-                >
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-orange-500 rounded-full flex items-center justify-center text-white font-bold">
-                        {bid.bidder?.display_name?.[0] ||
-                          bid.bidder?.email[0].toUpperCase()}
+            <div className="mb-6">
+              <h2 className="text-lg font-semibold text-gray-900 mb-2">Description</h2>
+              <p className="text-gray-700 whitespace-pre-wrap">{task.description}</p>
+            </div>
+
+            {task.poster && (
+              <div className="border-t border-red-200 pt-4">
+                <h2 className="text-sm font-semibold text-gray-900 mb-2">Posted by</h2>
+                <div className="flex items-center gap-3">
+                  <div className="avatar avatar-lg">
+                    {task.poster.display_name?.[0] || task.poster.email[0].toUpperCase()}
+                  </div>
+                  <div>
+                    <div className="font-medium text-gray-900">
+                      {task.poster.display_name || task.poster.email}
+                    </div>
+                    {task.poster.rating && (
+                      <div className="flex items-center text-sm text-gray-600">
+                        <Star className="w-4 h-4 text-yellow-400 fill-current mr-1" aria-hidden="true" />
+                        {task.poster.rating.toFixed(1)} ({task.poster.review_count} reviews)
                       </div>
-                      <div>
-                        <div className="font-medium text-gray-900">
-                          {bid.bidder?.display_name || bid.bidder?.email}
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+          </article>
+
+          {/* Bid Form Toggle */}
+          {canBid && !showBidForm && (
+            <div className="mb-6">
+              <button
+                onClick={() => setShowBidForm(true)}
+                className="btn btn-primary w-full text-lg py-4"
+              >
+                <Send className="w-5 h-5" aria-hidden="true" />
+                🦞 Submit a Bid
+              </button>
+            </div>
+          )}
+
+          {/* Bid Form */}
+          {showBidForm && canBid && (
+            <div className="card mb-6">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">Submit Your Bid</h2>
+              <form onSubmit={handleSubmitBid} className="space-y-4">
+                <div>
+                  <label htmlFor="bid-amount" className="block text-sm font-medium text-gray-900 mb-2">
+                    <DollarSign className="inline w-4 h-4 mr-1" aria-hidden="true" />
+                    Your Bid Amount (USD) *
+                  </label>
+                  <input
+                    id="bid-amount"
+                    type="number"
+                    value={bidData.amount || ''}
+                    onChange={(e) =>
+                      setBidData({ ...bidData, amount: parseFloat(e.target.value) || 0 })
+                    }
+                    required
+                    min="0"
+                    step="0.01"
+                    className="input"
+                    placeholder="Enter your bid amount"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="bid-proposal" className="block text-sm font-medium text-gray-900 mb-2">
+                    Proposal *
+                  </label>
+                  <textarea
+                    id="bid-proposal"
+                    value={bidData.proposal}
+                    onChange={(e) => setBidData({ ...bidData, proposal: e.target.value })}
+                    required
+                    rows={4}
+                    className="input"
+                    placeholder="Explain your approach, relevant experience, and why you're the best fit..."
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="bid-hours" className="block text-sm font-medium text-gray-900 mb-2">
+                      <Clock className="inline w-4 h-4 mr-1" aria-hidden="true" />
+                      Estimated Hours
+                    </label>
+                    <input
+                      id="bid-hours"
+                      type="number"
+                      value={bidData.estimated_hours || ''}
+                      onChange={(e) =>
+                        setBidData({
+                          ...bidData,
+                          estimated_hours: parseFloat(e.target.value) || undefined,
+                        })
+                      }
+                      min="0"
+                      step="0.5"
+                      className="input"
+                      placeholder="e.g., 10"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="bid-completion" className="block text-sm font-medium text-gray-900 mb-2">
+                      <Calendar className="inline w-4 h-4 mr-1" aria-hidden="true" />
+                      Completion Date
+                    </label>
+                    <input
+                      id="bid-completion"
+                      type="date"
+                      value={bidData.estimated_completion || ''}
+                      onChange={(e) =>
+                        setBidData({ ...bidData, estimated_completion: e.target.value })
+                      }
+                      className="input"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex gap-4 pt-4">
+                  <button
+                    type="button"
+                    onClick={() => setShowBidForm(false)}
+                    className="btn btn-ghost flex-1"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className="btn btn-primary flex-1 disabled:opacity-50"
+                  >
+                    {submitting ? 'Submitting...' : 'Submit Bid'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          )}
+
+          {/* Bids List */}
+          <section className="card">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+              Bids ({bids.length})
+            </h2>
+
+            {bids.length === 0 ? (
+              <p className="text-gray-700 text-center py-8">No bids yet</p>
+            ) : (
+              <div className="space-y-4">
+                {bids.map((bid) => (
+                  <article
+                    key={bid.id}
+                    className={`border-2 rounded-lg p-4 ${
+                      bid.status === 'ACCEPTED'
+                        ? 'border-green-500 bg-green-50'
+                        : bid.status === 'REJECTED'
+                        ? 'border-red-300 bg-red-50'
+                        : 'border-red-200 bg-orange-50'
+                    }`}
+                  >
+                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-3">
+                      <div className="flex items-center gap-3">
+                        <div className="avatar avatar-md">
+                          {bid.bidder?.display_name?.[0] ||
+                            bid.bidder?.email[0].toUpperCase()}
                         </div>
-                        {bid.bidder?.rating && (
-                          <div className="flex items-center text-sm text-gray-900">
-                            <Star className="w-3 h-3 text-yellow-400 fill-current mr-1" />
-                            {bid.bidder.rating.toFixed(1)} ({bid.bidder.review_count}{' '}
-                            reviews)
+                        <div>
+                          <div className="font-medium text-gray-900">
+                            {bid.bidder?.display_name || bid.bidder?.email}
                           </div>
+                          {bid.bidder?.rating && (
+                            <div className="flex items-center text-sm text-gray-600">
+                              <Star className="w-3 h-3 text-yellow-400 fill-current mr-1" aria-hidden="true" />
+                              {bid.bidder.rating.toFixed(1)} ({bid.bidder.review_count} reviews)
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-2xl font-bold text-red-600">
+                          ${bid.amount}
+                        </div>
+                        {bid.status === 'ACCEPTED' && (
+                          <span className="badge badge-success mt-1">
+                            <CheckCircle className="w-4 h-4" aria-hidden="true" />
+                            Accepted
+                          </span>
+                        )}
+                        {bid.status === 'REJECTED' && (
+                          <span className="badge badge-error mt-1">
+                            <XCircle className="w-4 h-4" aria-hidden="true" />
+                            Rejected
+                          </span>
                         )}
                       </div>
                     </div>
-                    <div className="text-right">
-                      <div className="text-2xl font-bold text-red-600">
-                        ${bid.amount}
-                      </div>
-                      {bid.status === 'ACCEPTED' && (
-                        <div className="flex items-center text-green-600 text-sm font-semibold mt-1">
-                          <CheckCircle className="w-4 h-4 mr-1" />
-                          Accepted
-                        </div>
+
+                    <p className="text-gray-700 mb-3 whitespace-pre-wrap">{bid.proposal}</p>
+
+                    <div className="flex flex-wrap gap-4 text-sm text-gray-600">
+                      {bid.estimated_hours && (
+                        <span className="flex items-center gap-1">
+                          <Clock className="w-4 h-4" aria-hidden="true" />
+                          {bid.estimated_hours} hours
+                        </span>
                       )}
-                      {bid.status === 'REJECTED' && (
-                        <div className="flex items-center text-red-600 text-sm font-semibold mt-1">
-                          <XCircle className="w-4 h-4 mr-1" />
-                          Rejected
-                        </div>
+                      {bid.estimated_completion && (
+                        <span className="flex items-center gap-1">
+                          <Calendar className="w-4 h-4" aria-hidden="true" />
+                          Complete by: {new Date(bid.estimated_completion).toLocaleDateString()}
+                        </span>
                       )}
                     </div>
-                  </div>
 
-                  <p className="text-gray-900 mb-3 whitespace-pre-wrap">{bid.proposal}</p>
-
-                  <div className="flex flex-wrap gap-4 text-sm text-gray-900">
-                    {bid.estimated_hours && (
-                      <div className="flex items-center">
-                        <Clock className="w-4 h-4 mr-1" />
-                        {bid.estimated_hours} hours
-                      </div>
-                    )}
-                    {bid.estimated_completion && (
-                      <div className="flex items-center">
-                        <Calendar className="w-4 h-4 mr-1" />
-                        Complete by:{' '}
-                        {new Date(bid.estimated_completion).toLocaleDateString()}
-                      </div>
-                    )}
-                  </div>
-
-                  {isTaskPoster &&
-                    task.status === 'OPEN' &&
-                    bid.status === 'PENDING' && (
-                      <div className="mt-4">
+                    {isTaskPoster && task.status === 'OPEN' && bid.status === 'PENDING' && (
+                      <div className="mt-4 pt-4 border-t border-red-200">
                         <button
                           onClick={() => handleAcceptBid(bid.id)}
-                          className="px-4 py-2 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition"
+                          className="btn bg-green-600 text-white hover:bg-green-700"
                         >
                           Accept Bid
                         </button>
                       </div>
                     )}
-                </div>
-              ))}
-            </div>
-          )}
+                  </article>
+                ))}
+              </div>
+            )}
+          </section>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
