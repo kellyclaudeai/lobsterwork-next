@@ -208,7 +208,7 @@ export default function TaskDetail() {
                   {task.poster.display_name?.[0] || task.poster.email[0].toUpperCase()}
                 </div>
                 <div>
-                  <div className="font-medium">
+                  <div className="font-medium text-gray-900">
                     {task.poster.display_name || task.poster.email}
                   </div>
                   {task.poster.rating && (
@@ -358,7 +358,7 @@ export default function TaskDetail() {
                           bid.bidder?.email[0].toUpperCase()}
                       </div>
                       <div>
-                        <div className="font-medium">
+                        <div className="font-medium text-gray-900">
                           {bid.bidder?.display_name || bid.bidder?.email}
                         </div>
                         {bid.bidder?.rating && (
