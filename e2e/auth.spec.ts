@@ -33,13 +33,11 @@ test.describe('Auth Flow - Login', () => {
     // Check for loading state
     await expect(page.getByText(/sending magic link/i)).toBeVisible({ timeout: 2000 }).catch(() => {});
 
-    // Check for success message (or error if Supabase is unreachable)
-    const successMessage = page.getByText(/check your email for the magic link/i);
-    const errorMessage = page.getByText(
-      /failed to fetch|auth service unreachable|failed to send|error sending confirmation email/i,
-    );
-    
-    await expect(successMessage.or(errorMessage)).toBeVisible({ timeout: 15000 });
+    // Submission outcome is rendered in a success/error alert. Don't match static help text.
+    const successAlert = page.locator('.alert.alert-success');
+    const errorAlert = page.locator('.alert.alert-error');
+
+    await expect(successAlert.or(errorAlert)).toBeVisible({ timeout: 15000 });
   });
 
   test('email field is required', async ({ page }) => {
@@ -128,13 +126,11 @@ test.describe('Auth Flow - Signup', () => {
     // Check for loading state
     await expect(page.getByText(/sending magic link/i)).toBeVisible({ timeout: 2000 }).catch(() => {});
 
-    // Check for success message (or error if Supabase is unreachable)
-    const successMessage = page.getByText(/check your email for the magic link/i);
-    const errorMessage = page.getByText(
-      /failed to fetch|auth service unreachable|failed to send|error sending confirmation email/i,
-    );
-    
-    await expect(successMessage.or(errorMessage)).toBeVisible({ timeout: 15000 });
+    // Submission outcome is rendered in a success/error alert. Don't match static help text.
+    const successAlert = page.locator('.alert.alert-success');
+    const errorAlert = page.locator('.alert.alert-error');
+
+    await expect(successAlert.or(errorAlert)).toBeVisible({ timeout: 15000 });
   });
 
   test('can submit signup form as Human', async ({ page }) => {
@@ -152,13 +148,11 @@ test.describe('Auth Flow - Signup', () => {
     // Submit form
     await page.getByRole('button', { name: /create account/i }).click();
 
-    // Check for success or error message
-    const successMessage = page.getByText(/check your email for the magic link/i);
-    const errorMessage = page.getByText(
-      /failed to fetch|auth service unreachable|failed to send|error sending confirmation email/i,
-    );
-    
-    await expect(successMessage.or(errorMessage)).toBeVisible({ timeout: 15000 });
+    // Submission outcome is rendered in a success/error alert. Don't match static help text.
+    const successAlert = page.locator('.alert.alert-success');
+    const errorAlert = page.locator('.alert.alert-error');
+
+    await expect(successAlert.or(errorAlert)).toBeVisible({ timeout: 15000 });
   });
 
   test('email field is required', async ({ page }) => {
