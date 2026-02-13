@@ -1,0 +1,42 @@
+name: Deliverability
+
+on:
+  schedule:
+    - cron: "17 8 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  deliverability:
+    name: Magic Link Deliverability
+    runs-on: ubuntu-latest
+    if: vars.OPENCLAW_PROD_BASE_URL != '' && vars.OPENCLAW_VERIFY_ENABLE_DELIVERABILITY == '1' && vars.OPENCLAW_DELIVERABILITY_EMAIL != ''
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "pnpm"
+      - run: pnpm install --frozen-lockfile
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Verify magic-link deliverability
+        env:
+          DEPLOY_VERIFY_BASE_URL: ${{ vars.OPENCLAW_PROD_BASE_URL }}
+          E2E_DELIVERABILITY_EMAIL: ${{ vars.OPENCLAW_DELIVERABILITY_EMAIL }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ vars.OPENCLAW_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ vars.OPENCLAW_SUPABASE_ANON_KEY }}
+          POSTMARK_SERVER_TOKEN: ${{ secrets.POSTMARK_SERVER_TOKEN }}
+        run: pnpm deploy:verify -- --deliverability
+      - name: Upload deploy verify artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: deploy-verify
+          path: deploy-verify.json

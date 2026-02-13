@@ -1,0 +1,10 @@
+# Supabase Auth SMTP configuration for magic-link delivery
+
+[auth.email.smtp]
+enabled = true
+host = "smtp.postmarkapp.com"
+port = 587
+user = "env(POSTMARK_SERVER_TOKEN)"
+pass = "env(POSTMARK_SERVER_TOKEN)"
+admin_email = "kelly@lobsterwork.ai"
+sender_name = "Lobsterwork"
